@@ -397,16 +397,53 @@
       color: #E65100;
     }
 
-    .code-snippet {
-      background-color: #212529;
-      color: #ECEFF1;
-      padding: 14px 18px;
+    /* Estilo de simulación de Chatter */
+    .chatter-preview {
+      background-color: #F8F9FA;
+      border: 1px solid var(--vx-border);
+      border-left: 4px solid var(--vx-primary);
       border-radius: 4px;
-      font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
-      font-size: 13px;
-      overflow-x: auto;
-      margin: 12px 0;
-      border: 1px solid #37474F;
+      padding: 16px 20px;
+      margin: 16px 0;
+      font-size: 14px;
+    }
+    .chatter-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      font-size: 12px;
+      color: #607D8B;
+    }
+    .chatter-avatar {
+      width: 22px;
+      height: 22px;
+      background-color: var(--vx-primary);
+      color: #FFFFFF;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: bold;
+    }
+
+    .changelog-item {
+      border-left: 3px solid var(--vx-secondary);
+      padding-left: 18px;
+      margin-bottom: 22px;
+    }
+    .changelog-item.latest {
+      border-left-color: var(--vx-primary);
+    }
+    .changelog-date {
+      font-family: 'Sora', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--vx-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 4px;
     }
 
     footer {
@@ -512,6 +549,39 @@
       <p>
         Para garantizar la integridad transaccional, contable y operativa, la ejecución invoca el motor oficial de la suite <strong>Data Cleaning (<code>data_merge</code>)</strong> de Odoo Enterprise, unificando todo el historial de ventas, compras, puntos de venta, facturas y movimientos de almacén, archivando automáticamente los productos duplicados y consolidando las existencias físicas en sus respectivas ubicaciones.
       </p>
+    </section>
+
+    <!-- Historial de Mejoras y Ajustes Técnicos -->
+    <section class="card">
+      <h2 class="card-title">Registro de Mejoras y Actualizaciones del Script</h2>
+      
+      <div class="changelog-item latest">
+        <div class="changelog-date">Actualización: Renderizado Enriquecido de Mensajes en Chatter (Odoo 17 / markupsafe)</div>
+        <h4 style="font-size: 16px; margin-bottom: 6px;">Corrección de Etiquetas HTML sin Interpretar en la Bitácora</h4>
+        <p style="margin-bottom: 10px;">
+          <strong>Diagnóstico:</strong> En Odoo 17, el método nativo <code>message_post(body=...)</code> implementa un filtro de seguridad estricto mediante la librería <code>markupsafe</code>. Cuando se pasa una cadena estándar de Python (<code>str</code>), Odoo asume que es texto plano no confiable y escapa automáticamente las etiquetas convirtiendo <code>&lt;</code> en <code>&amp;lt;</code> y <code>&gt;</code> en <code>&amp;gt;</code>, haciendo que el usuario viera el texto literal <code>&lt;b&gt;Fusión...&lt;/b&gt;</code> en lugar de negritas.
+        </p>
+        <p style="margin-bottom: 10px;">
+          <strong>Solución Aplicada:</strong> Se actualizó la Acción de Servidor (ID 1093) para registrar la nota y posteriormente asignar el contenido HTML directamente sobre el campo <code>body</code> del registro <code>mail.message</code>, el cual cuenta con sanitización nativa de HTML permitiendo renderizar formato enriquecido de forma segura y transparente.
+        </p>
+        <p style="margin-bottom: 8px;">
+          <strong>Vista previa del mensaje renderizado en Chatter:</strong>
+        </p>
+        <div class="chatter-preview">
+          <div class="chatter-header">
+            <span class="chatter-avatar">O</span>
+            <strong>OdooBot / Administrador</strong> &bull; Hace unos momentos
+          </div>
+          <div>
+            <b>Fusión de productos completada (Data Cleaning):</b><br/>
+            SKU Maestro: <b>40160-01G50-AR</b> (ID 24260)<br/>
+            SKUs fusionados y archivados: R40160-01G50-AR.
+          </div>
+        </div>
+        <p style="font-size: 13px; color: #546E7A;">
+          <em>Nota: Los 5 mensajes generados previamente en los productos maestros fueron actualizados en la base de datos para que ya se visualicen con formato enriquecido.</em>
+        </p>
+      </div>
     </section>
 
     <!-- Tabla Maestra de Resultados con Enlaces Directos -->
